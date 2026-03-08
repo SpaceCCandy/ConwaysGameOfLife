@@ -37,7 +37,7 @@ public class Runner extends PApplet{
         patternButton = new FunctionButton(block, 50, 50, 875, 400);
 
         // Patterns
-        P_block = new Pattern("Block", 1, new int[]{0, -1, -1, 0}, new int[]{0, 0, 1, 1});
+        P_block = new Pattern("Block", 1, new int[]{0, 1, 1, 0}, new int[]{0, 0, 1, 1});
 
         P_statics = new Pattern[]{P_block, P_loaf, P_boat}; // 1-5
         P_flash = new Pattern[]{P_blinker, P_beacon, P_toad}; // 6-10

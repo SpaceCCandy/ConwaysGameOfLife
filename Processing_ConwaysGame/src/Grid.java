@@ -124,7 +124,7 @@ public class Grid {
         int initialRow = cellSelectY;
         int initialCol = cellSelectX;
 
-        for (int i = 0; i < pattern.posX.length; i++) {
+        for (int i = 1; i < pattern.posX.length; i++) {
             int targetR = initialRow + pattern.posY[i];
             int targetC = initialCol + pattern.posX[i];
 
@@ -151,16 +151,16 @@ public class Grid {
 
         // Display Cells
         for(Cell[] thisRow: cellArray) {
-            row++;
             col = 0;
             for (Cell thisCell : thisRow) {
-                col++;
                 thisCell.display(pa);
                 if (thisCell.mouseHover(pa)) {
-                    cellSelectX = row;
-                    cellSelectY = col;
+                    cellSelectX = col;
+                    cellSelectY = row;
                 }
+                col++;
             }
+            row++;
         }
     }
 }
