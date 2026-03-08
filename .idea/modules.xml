@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HW/HW.iml" filepath="$PROJECT_DIR$/HW/HW.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Processing_CPS/Processing_CPS.iml" filepath="$PROJECT_DIR$/Processing_CPS/Processing_CPS.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Processing/Processing_ConwaysGame.iml" filepath="$PROJECT_DIR$/../Processing/Processing_ConwaysGame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Processing_Programs.iml" filepath="$PROJECT_DIR$/Processing_Programs.iml" />
+    </modules>
+  </component>
+</project>
