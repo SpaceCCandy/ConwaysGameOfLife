@@ -121,10 +121,11 @@ public class Grid {
     }
 
     public void placePattern(PApplet pa, Pattern pattern){
+        cellArray[cellSelectY][cellSelectX].state = true;
         int initialRow = cellSelectY;
         int initialCol = cellSelectX;
 
-        for (int i = 1; i < pattern.posX.length; i++) {
+        for (int i = 0; i < pattern.posX.length; i++) {
             int targetR = initialRow + pattern.posY[i];
             int targetC = initialCol + pattern.posX[i];
 

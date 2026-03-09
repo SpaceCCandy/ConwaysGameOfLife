@@ -79,8 +79,6 @@ public class Cell extends Button {
                 isAlive = !isAlive;
             }
             state = pa.mousePressed;
-//        } else if (cellHighlight) {
-//            R = G = B = 230;
         } else {
             updateState(pa);
             pa.fill(R, G, B);

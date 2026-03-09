@@ -1,5 +1,10 @@
 import processing.core.PImage;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Pattern {
     public String name;
     public int type;
@@ -19,4 +24,5 @@ public class Pattern {
         this(name, type, posX, posY);
         this.icon = img;
     }
+    // Assets/SavesInfo
 }

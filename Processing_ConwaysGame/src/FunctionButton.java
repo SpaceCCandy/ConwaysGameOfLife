@@ -47,7 +47,7 @@ public class FunctionButton extends Button {
         }
 
         // Display button interactive graphic
-        pa.rect(xPos-wSize/2, yPos-hSize/2, wSize, hSize, 10);
+        pa.rect(xPos-wSize/2, yPos-hSize/2, wSize, hSize, 5);
         pa.fill(0);
         if (text != null) {
             pa.text(text, xPos-(TEXT_SIZE/4 *text.length()) + 1, yPos+TEXT_SIZE/4);
