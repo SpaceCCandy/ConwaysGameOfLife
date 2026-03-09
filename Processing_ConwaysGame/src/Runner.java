@@ -8,40 +8,57 @@ public class Runner extends PApplet{
     public int CELL_SIZE = 50;
     public int time = 0;
     public int speed = 1;
-    public int placing = -1; // -1 indicates no placement
+    public int placing = 0; // -1 indicates no placement
     public int genCount;
     public boolean isRunning;
 
     Grid grid;
-    FunctionButton play, reset, random, patternButton;
-    Pattern currPattern;
-    Pattern P_block, P_loaf, P_beeHive, P_boat, P_blinker, P_beacon, P_toad, P_glider, P_ship;
-    PImage Pattern, block;
-    Pattern[] P_statics;
-    Pattern[] P_flash;
-    Pattern[] P_customs;
-
+    FunctionButton play, reset, random, patternBtn, leftArrowBtn, rightArrowBtn;
+    static Pattern currPattern;
+    boolean placeMode;
+    Pattern P_block, P_loaf, P_boat, P_blinker, P_beacon, P_toad, P_glider, P_ship;
+    PImage block, loaf, beeHive, boat, blinker, beacon, toad, glider, ship;
+    Pattern[] P_Patterns;
 
     public void settings(){
-        size(1000, 800);
+        size(1100, 800);
         pixelDensity(1);
     }
 
     public void setup(){
         // Buttons
         grid = new Grid(CELL_SIZE, 700, 700, 400, 400);
-        play = new FunctionButton("Play", 100, 50, 875, 500);
-        reset = new FunctionButton("Reset", 100, 50, 875, 600);
-        random = new FunctionButton("Random", 100, 50, 875, 700);
+        play = new FunctionButton("Play", 100, 50, 925, 500);
+        reset = new FunctionButton("Reset", 100, 50, 925, 600);
+        random = new FunctionButton("Random", 100, 50, 925, 700);
         block = loadImage("Assets/BlockIcon.png");
-        patternButton = new FunctionButton(block, 50, 50, 875, 400);
+        loaf = loadImage("Assets/LoafIcon.png");
+        boat = loadImage("Assets/BoatIcon.png");
+        blinker = loadImage("Assets/BlinkerIcon.png");
+        beacon = loadImage("Assets/BeaconIcon.png");
+        toad = loadImage("Assets/ToadIcon.png");
+        glider = loadImage("Assets/GliderIcon.png");
+        ship = loadImage("Assets/ShipIcon.png");
+        patternBtn = new FunctionButton(block, 150, 150, 925, 300);
+        leftArrowBtn = new FunctionButton("<", 50, 50, 800, 300, 67, 190, 255);
+        rightArrowBtn = new FunctionButton(">", 50, 50, 1050, 300, 67, 190, 255);
 
         // Patterns
-        P_block = new Pattern("Block", 1, new int[]{0, 1, 1, 0}, new int[]{0, 0, 1, 1});
+        placeMode = false;
 
-        P_statics = new Pattern[]{P_block, P_loaf, P_boat}; // 1-5
-        P_flash = new Pattern[]{P_blinker, P_beacon, P_toad}; // 6-10
-        P_customs = new Pattern[]{P_glider, P_ship}; // 11-15
+        P_block = new Pattern("Block", 0, new int[]{0, 1, 1, 0}, new int[]{0, 0, 1, 1}, block); // 0
+        P_loaf = new Pattern("loaf", 0, new int[]{1, 2, 0, 3, 1, 2, 2}, new int[]{0, 0, 1, 1, 2, 2, 3}, loaf); // 1
+        P_boat = new Pattern("Boat", 0, new int[]{-1, -2, -2, -1, 0}, new int[]{ 0,  1,  2,  2, 1}, boat); //2
+
+        P_blinker = new Pattern("Blinker", 1, new int[]{0, 0, 0}, new int[]{0, 1, -1}, blinker); // 5
+        P_beacon = new Pattern("Beacon", 1, new int[]{0, -1, -1, 0, -2, -3, -3, -2}, new int[]{0,  0,  1, 1,  2,  2,  3,  3}, beacon); // 6
+        P_toad = new Pattern("Toad", 1, new int[]{-1, -2, -3, 0, -1, -2}, new int[]{ 0,  0,  0, 1,  1,  1}, toad);// 7
+
+        P_glider = new Pattern("Glider", 2, new int[]{0, -1, -2, 0, -1}, new int[]{0,  0,  0, 1,  2}, glider); // 10
+        P_ship = new Pattern("Ship", 2, new int[]{0, -1, -2, -3, -4, -4, 0, 0, -1}, new int[]{0,  0,  0,  0,  1,  3, 1, 2,  3}, ship); //11
+
+        P_Patterns = new Pattern[]{P_block, P_loaf, P_boat, P_blinker, P_beacon, P_toad, P_glider, P_ship};
+        currPattern = P_block;
     }
 
     public void draw(){
@@ -58,21 +75,11 @@ public class Runner extends PApplet{
             }
         }
 
-//        if (placing < 5) {
-//            currPattern = P_statics[placing];
-//        } else if (placing < 10) {
-//            currPattern = P_flash[placing-5];
-//        } else if (placing < 20){
-//            currPattern = P_customs[placing-10];
-//        } else {
-//            currPattern = P_statics[1];
-//        }
-
         // Place mode
-        if (placing > -1) {
+        if (placeMode) {
             if (mousePressed & grid.mouseHover(this)) {
-                grid.placePattern(this, P_block);
-                placing = -1;
+                grid.placePattern(this, currPattern);
+                placeMode = false;
             }
         }
 
@@ -80,17 +87,38 @@ public class Runner extends PApplet{
         if (reset.mousePressed) {
             grid.reset();
         }
-        if (patternButton.mousePressed) {
-            placing = 1;
-            System.out.println("placing = 1");
-        }
         if (random.mousePressed && !random.clickState) {
             grid.random();
         }
         random.clickState = random.mousePressed;
 
+        // Patterns
+        if (patternBtn.mousePressed) {
+            placeMode = true;
+        }
+        if (leftArrowBtn.mousePressed && !leftArrowBtn.clickState) {
+            if (placing > 0) {
+                placing--;
+            }
+            else {
+                placing = P_Patterns.length-1;
+            }
+        }
+        leftArrowBtn.clickState = leftArrowBtn.mousePressed;
+        if (rightArrowBtn.mousePressed && !rightArrowBtn.clickState) {
+            if (placing < P_Patterns.length-1) {
+                placing++;
+            }
+            else {
+                placing = 0;
+            }
+        }
+        rightArrowBtn.clickState = rightArrowBtn.mousePressed;
+
+        // Play
         if (play.mousePressed && !play.clickState) {
             isRunning = !isRunning;
+            System.out.println(isRunning);
         }
         play.clickState = play.mousePressed;
         grid.updateStatus = isRunning;
@@ -106,18 +134,25 @@ public class Runner extends PApplet{
         }
         // End of button functions
 
+        currPattern = P_Patterns[placing];
+        patternBtn.img = currPattern.icon;
+
         grid.display(this);
         play.display(this);
         reset.display(this);
         random.display(this);
-        patternButton.display(this);
+        patternBtn.display(this);
+        leftArrowBtn.display(this);
+        rightArrowBtn.display(this);
 
         this.fill(0);
         this.text("Generation: " + genCount, 100, 50);
     }
 
     public void mousePressed() {
-        isRunning = false;
+        if (grid.mouseHover(this)) {
+            isRunning = false;
+        }
     }
 
     public void keyPressed() {

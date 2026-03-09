@@ -21,6 +21,10 @@ public class FunctionButton extends Button {
         super(wSize, hSize, xPos, yPos, RGB);
         this.text = text;
     }
+    public FunctionButton(String text, int wSize, int hSize, int xPos, int yPos, int R, int G, int B) {
+        super(wSize, hSize, xPos, yPos, R, G, B);
+        this.text = text;
+    }
     public FunctionButton(PImage img, int wSize, int hSize, int xPos, int yPos) {
         super(wSize, hSize, xPos, yPos);
         this.img = img;
@@ -50,7 +54,7 @@ public class FunctionButton extends Button {
             pa.textSize(20);
         }
         else {
-            pa.image(img, xPos-wSize/2, yPos-hSize/2, 50, 50);
+            pa.image(img, xPos-wSize/2, yPos-hSize/2, wSize, hSize);
         }
     }
 
