@@ -7,9 +7,9 @@ public class Runner extends PApplet{
     public static void main(String[] args) {
         PApplet.main("Runner", args); // Name must match the class name
     }
-    public int CELL_SIZE = 50;
+    public int CELL_SIZE = 20;
     public int time = millis();
-    public int speedDelay = 1;
+    public int speedDelay = 2;
     public int placing = 0; // -1 indicates no placement
     public int genCount;
     public boolean isRunning;
@@ -74,8 +74,9 @@ public class Runner extends PApplet{
         background(230); // Clears screen
 
         // Speed control
-        if (grid.updateStatus && !mousePressed) {
+        if (grid.updateStatus && !(mousePressed && grid.mouseHover(this))) {
             if (millis()-time > speedDelay*100) {
+                System.out.println(mousePressed);
                 grid.updateGrid();
                 genCount++;
                 time = millis();
@@ -113,6 +114,7 @@ public class Runner extends PApplet{
         }
         leftArrowBtn.clickState = leftArrowBtn.mousePressed;
         if (rightArrowBtn.mousePressed && !rightArrowBtn.clickState) {
+            System.out.println("speedUP clicked");
             if (placing < P_Patterns.length-1) {
                 placing++;
             }

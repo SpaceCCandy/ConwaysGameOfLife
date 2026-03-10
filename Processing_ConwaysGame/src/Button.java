@@ -42,10 +42,11 @@ public class Button {
     }
     // End of Constructors
 
+    // Returns (True) only when mouse is in the range of the interactive graphic
     public boolean mouseHover(PApplet pa){
-        // Returns (True) only when mouse is in the range of the interactive graphic
         return (pa.mouseX <= xPos+this.wSize/2 && pa.mouseX >= xPos-this.wSize/2) && (pa.mouseY <= yPos+this.hSize/2 && pa.mouseY >= yPos-this.hSize/2);
     }
+
     // Display Method
     public void display(PApplet pa) {
         // Visual Effect for pressed
