@@ -7,6 +7,7 @@ public class FunctionButton extends Button {
     public int TEXT_SIZE = 20;
     public boolean mousePressed;
     public boolean clickState;
+    public float rotateImg;
 
     // Constructors
     public FunctionButton() {
@@ -36,13 +37,13 @@ public class FunctionButton extends Button {
         if (mouseHover(pa)) {
             pa.fill(127);
             if (pa.mousePressed && !state) {
-                mousePressed = true;
+                this.mousePressed = true;
                 pa.fill(R-10, G-10, B-10);
             }
             state = pa.mousePressed;
         }
         else {
-            mousePressed = false;
+            this.mousePressed = false;
             pa.fill(R, G, B);
         }
 
@@ -54,8 +55,11 @@ public class FunctionButton extends Button {
             pa.textSize(20);
         }
         else {
-            pa.image(img, xPos-wSize/2, yPos-hSize/2, wSize, hSize);
+            pa.pushMatrix();
+            pa.translate(xPos, yPos);
+            pa.rotate(rotateImg);
+            pa.image(img, -wSize/2, -hSize/2, wSize, hSize);
+            pa.popMatrix();
         }
     }
-
 }

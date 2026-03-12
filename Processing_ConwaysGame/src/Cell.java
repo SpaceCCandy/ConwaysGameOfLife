@@ -14,11 +14,15 @@ public class Cell extends Button {
     // Attributes
     public boolean isAlive;
     public boolean nextCellState;
-    public boolean cellHighlight;
+    public int lifeSpan;
+    public int deathSpan;
+    public double TRAIL_DUR = 100.0;
 
     // Constructors
     public Cell() {
         isAlive = false;
+        lifeSpan = 0;
+        deathSpan = 0;
     }
     public Cell(int wSize, int hSize, int xPos, int yPos) {
         super(hSize, wSize, xPos, yPos);
@@ -61,11 +65,31 @@ public class Cell extends Button {
         // Updates the visuals of the cell given cell state
         if (isAlive) {
             // If cell is alive
-            R = G = B = 0;
+            deathSpan = 0;
+
+            // Actual color 449E97, saturation scales on how long it's been alive
+            R = (int)(68 * ((TRAIL_DUR-lifeSpan)/TRAIL_DUR));
+            G = (int)(158 * ((TRAIL_DUR-lifeSpan)/TRAIL_DUR));
+            B = (int)(151 * ((TRAIL_DUR-lifeSpan)/TRAIL_DUR));
+
+            // Setting limit
+            if (lifeSpan <= TRAIL_DUR) {
+                lifeSpan++;
+            }
         }
         else {
             // If cell is empty
-            R = G = B = 255;
+            lifeSpan = 0;
+
+            // Saturation scales on how long it's been DEAD
+            R = 235 + (int)(20 * (deathSpan/(TRAIL_DUR*1.5)));
+            G = 215 + (int)(40 * (deathSpan/(TRAIL_DUR*1.5)));
+            B = 255;
+
+            // Setting limit
+            if (deathSpan <= TRAIL_DUR*1.5) {
+                deathSpan++;
+            }
         }
     }
 
@@ -85,7 +109,8 @@ public class Cell extends Button {
         }
 
         // Display button interactive graphic
-        pa.rect(xPos-wSize/2, yPos-hSize/2, wSize, hSize);
+        pa.rect(xPos-wSize/2, yPos-hSize/2, wSize, hSize, 2);
+        pa.stroke(150);
         pa.fill(255);
     }
 }
