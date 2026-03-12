@@ -83,9 +83,9 @@ public class Grid {
     public void updateGrid() {
         initializeGrid();
 
-        for (int row = 0; row < cellArray.length; row++) {
-            for (int col = 0; col < cellArray[row].length; col++) {
-                cellArray[row][col].isAlive = cellArray[row][col].nextCellState;
+        for (Cell[] cells : cellArray) {
+            for (Cell cell : cells) {
+                cell.isAlive = cell.nextCellState;
             }
         }
     }
@@ -107,18 +107,18 @@ public class Grid {
 
     // Sets every cell to a random state
     public void random() {
-        for (int row = 0; row < cellArray.length; row++) {
-            for (int col = 0; col < cellArray[row].length; col++) {
-                cellArray[row][col].isAlive = Math.random() >= 0.5 ? true: false;
+        for (Cell[] cells : cellArray) {
+            for (Cell cell : cells) {
+                cell.isAlive = Math.random() >= 0.5;
             }
         }
     }
 
     // Resets all cells
     public void reset() {
-        for (int row = 0; row < cellArray.length; row++) {
-            for (int col = 0; col < cellArray[row].length; col++) {
-                cellArray[row][col].isAlive = false;
+        for (Cell[] cells : cellArray) {
+            for (Cell cell : cells) {
+                cell.isAlive = false;
             }
         }
     }

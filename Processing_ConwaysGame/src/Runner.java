@@ -293,25 +293,25 @@ public class Runner extends PApplet {
 
     // Saves the current grid into savesInfo
     public void savesFile() {
-        String data1 = "";
+        StringBuilder data1 = new StringBuilder();
 
         // Reads grid to create data to transfer into savesInfo
         for (int i = 0; i < grid.cellArray.length; i++) {
             for (int j = 0; j < grid.cellArray.length; j++) {
                 if (grid.cellArray[j][i].isAlive) {
-                    data1 += "X";
+                    data1.append("X");
                 }
                 else {
-                    data1 += ".";
+                    data1.append(".");
                 }
             }
-            data1 += "\n";
+            data1.append("\n");
         }
 
         // Write to file using FileWriter
         try {
             FileWriter myWriter = new FileWriter("src/Assets/SavesInfo");
-            myWriter.write(data1);
+            myWriter.write(data1.toString());
             myWriter.close();  // must close manually
         } catch (IOException e) {
             System.out.println("An error occurred.");
