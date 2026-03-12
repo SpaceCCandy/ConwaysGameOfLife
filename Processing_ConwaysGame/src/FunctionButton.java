@@ -1,10 +1,16 @@
 import processing.core.PApplet;
 import processing.core.PImage;
 
+/*
+Interactive buttons with either text, or image displays
+*/
+
 public class FunctionButton extends Button {
+    // Attributes
     public String text;
     public PImage img;
     public int TEXT_SIZE = 20;
+    // Misc
     public boolean mousePressed;
     public boolean clickState;
     public float rotateImg;
@@ -50,14 +56,17 @@ public class FunctionButton extends Button {
         // Display button interactive graphic
         pa.rect(xPos-wSize/2, yPos-hSize/2, wSize, hSize, 5);
         pa.fill(0);
+
+        // If there is text, display text
         if (text != null) {
-            pa.text(text, xPos-(TEXT_SIZE/4 *text.length()) + 1, yPos+TEXT_SIZE/4);
+            pa.text(text, xPos, yPos);
             pa.textSize(20);
         }
+        // If not, display image
         else {
             pa.pushMatrix();
             pa.translate(xPos, yPos);
-            pa.rotate(rotateImg);
+            pa.rotate(rotateImg); // Rotation state
             pa.image(img, -wSize/2, -hSize/2, wSize, hSize);
             pa.popMatrix();
         }

@@ -1,12 +1,15 @@
 import processing.core.PApplet;
 
 /*
+Basic clickable button
+
 Methods:
 - mouseHover(PApplet pa)
 - display(PApplet pa)
 */
 
 public class Button {
+    // Attributes
     public int wSize;
     public int hSize;
     public int xPos;

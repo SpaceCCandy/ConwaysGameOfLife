@@ -22,7 +22,9 @@ public class Grid {
     public int yPos;
     public int cellSelectX;
     public int cellSelectY;
+    // Misc
     public boolean updateStatus;
+    public int cellCount;
 
     // Constructors
     public Grid() {
@@ -97,12 +99,13 @@ public class Grid {
         }
     }
 
+    // Checks if the mouse is over the grid
     public boolean mouseHover(PApplet pa){
         // Returns (True) only when mouse is in the range of the interactive graphic
         return (pa.mouseX <= xPos+this.gridWidth/2 && pa.mouseX >= xPos-this.gridWidth/2) && (pa.mouseY <= yPos+this.gridHeight/2 && pa.mouseY >= yPos-this.gridHeight/2);
     }
 
-    // Sets every cell to a random set
+    // Sets every cell to a random state
     public void random() {
         for (int row = 0; row < cellArray.length; row++) {
             for (int col = 0; col < cellArray[row].length; col++) {
@@ -120,8 +123,10 @@ public class Grid {
         }
     }
 
+    // Places down a pattern on the grid given current mouse position and Pattern object
     public void placePattern(PApplet pa, Pattern pattern){
         cellArray[cellSelectY][cellSelectX].state = true;
+        // Initial positions
         int initialRow = cellSelectY;
         int initialCol = cellSelectX;
 
@@ -148,14 +153,20 @@ public class Grid {
 
     public void display(PApplet pa) {
         int row = 0;
-        int col = 0;
+        int col;
+        cellCount = 0; // Cell count resets every cycle of checks
 
         // Display Cells
         for(Cell[] thisRow: cellArray) {
             col = 0;
             for (Cell thisCell : thisRow) {
                 thisCell.display(pa);
+                if (thisCell.isAlive) {
+                    // If cell is alive add to cellCount
+                    cellCount++;
+                }
                 if (thisCell.mouseHover(pa)) {
+                    // Keep track of cell, mouse is currently on
                     cellSelectX = col;
                     cellSelectY = row;
                 }

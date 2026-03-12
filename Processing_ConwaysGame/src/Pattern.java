@@ -24,5 +24,4 @@ public class Pattern {
         this(name, type, posX, posY);
         this.icon = img;
     }
-    // Assets/SavesInfo
 }

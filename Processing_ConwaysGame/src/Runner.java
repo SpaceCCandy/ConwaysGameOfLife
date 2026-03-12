@@ -12,8 +12,9 @@ public class Runner extends PApplet {
     public static void main(String[] args) {
         PApplet.main("Runner", args); // Name must match the class name
     }
-
-    public int CELL_SIZE = 20;
+    // Variables & declarations
+    static public int CELL_SIZE = 20;
+    static public int GRID_SIZE = 700;
     public int time = millis();
     public int speedDelay = 2;
     public int placing = 0; // -1 indicates no placement
@@ -23,13 +24,12 @@ public class Runner extends PApplet {
     static Pattern currPattern;
 
     Grid grid;
-    FunctionButton play, reset, random, patternBtn, leftArrowBtn, rightArrowBtn, upSpeed, downSpeed, rotationBtn;
-    Pattern P_block, P_loaf, P_boat, P_blinker, P_beacon, P_toad, P_glider, P_ship, P_save1, P_save2, P_save3;
+    FunctionButton play, reset, random, patternBtn, leftArrowBtn, rightArrowBtn, upSpeed, downSpeed, rotationBtn, saveBtn;
+    Pattern P_block, P_loaf, P_boat, P_blinker, P_beacon, P_toad, P_glider, P_ship, P_save1;
     PImage block, loaf, boat, blinker, beacon, toad, glider, ship, saveMIcon;
     Pattern[] P_Patterns;
 
     File savesInfo;
-    Scanner myReader;
 
 
     public void settings() {
@@ -40,16 +40,17 @@ public class Runner extends PApplet {
 
     public void setup() {
         // Buttons
-        grid = new Grid(CELL_SIZE, 700, 700, 400, 400);
-        play = new FunctionButton("Play", 100, 50, 925, 500);
-        reset = new FunctionButton("Reset", 100, 50, 925, 600);
-        random = new FunctionButton("Random", 100, 50, 925, 700);
-        patternBtn = new FunctionButton(block, 150, 150, 925, 300);
-        leftArrowBtn = new FunctionButton("<", 50, 80, 800, 300, 67, 190, 255);
-        rightArrowBtn = new FunctionButton(">", 50, 80, 1050, 300, 67, 190, 255);
-        upSpeed = new FunctionButton("<", 50, 50, 850, 150, 67, 190, 255);
-        downSpeed = new FunctionButton(">", 50, 50, 1000, 150, 67, 190, 255);
-        rotationBtn = new FunctionButton("Rotate", 80, 30, 925, 200, 67, 190, 255);
+        grid = new Grid(CELL_SIZE, GRID_SIZE, GRID_SIZE, 400, 400);
+        play = new FunctionButton("Play", 250, 50, 925, 360);
+        reset = new FunctionButton("Reset", 100, 50, 850, 420);
+        random = new FunctionButton("Random", 100, 50, 1000, 420);
+        patternBtn = new FunctionButton(block, 150, 150, 925, 180);
+        leftArrowBtn = new FunctionButton("<", 50, 80, patternBtn.xPos-125, patternBtn.yPos, 67, 190, 255);
+        rightArrowBtn = new FunctionButton(">", 50, 80, patternBtn.xPos+125, patternBtn.yPos, 67, 190, 255);
+        rotationBtn = new FunctionButton("Rotate", 80, 30, patternBtn.xPos, patternBtn.yPos-100, 67, 190, 255);
+        saveBtn = new FunctionButton("Save", 80, 30, patternBtn.xPos, patternBtn.yPos+125,67, 190, 255);
+        upSpeed = new FunctionButton("<", 50, 40, 830, 480, 67, 190, 255);
+        downSpeed = new FunctionButton(">", 50, 40, 1020, 480, 67, 190, 255);
 
         // Images
         block = loadImage("Assets/P_BlockIcon.png");
@@ -82,6 +83,7 @@ public class Runner extends PApplet {
         P_Patterns = new Pattern[]{P_block, P_loaf, P_boat, P_blinker, P_beacon, P_toad, P_glider, P_ship, P_save1};
         currPattern = P_block;
 
+        // Get the save from perious sessions
         loadSaveFile(P_save1);
     }
 
@@ -131,6 +133,9 @@ public class Runner extends PApplet {
             } else {
                 placing = P_Patterns.length - 1;
             }
+            if (placing == 8) {
+                loadSaveFile(P_save1);
+            }
         }
         leftArrowBtn.clickState = mousePressed;
         if (rightArrowBtn.mouseHover(this) && mousePressed && !rightArrowBtn.clickState) {
@@ -140,9 +145,13 @@ public class Runner extends PApplet {
             } else {
                 placing = 0;
             }
+            if (placing == 8) {
+                loadSaveFile(P_save1);
+            }
         }
         rightArrowBtn.clickState = mousePressed;
 
+        // Rotates patterns
         if (rotationBtn.mouseHover(this) && mousePressed && !rotationBtn.clickState) {
             patternBtn.rotateImg = patternBtn.rotateImg + (float)(Math.PI/2);
 
@@ -159,17 +168,23 @@ public class Runner extends PApplet {
         }
         rotationBtn.clickState = mousePressed;
 
+        // Saves current grid states
+        if (saveBtn.mouseHover(this) && mousePressed && !saveBtn.clickState) {
+            savesFile();
+        }
+
         // Speed
-        if (upSpeed.mousePressed && !upSpeed.clickState) {
+        if (upSpeed.mouseHover(this) && mousePressed && !upSpeed.clickState) {
             if (speedDelay > 0) {
                 speedDelay--;
             }
         }
-        upSpeed.clickState = upSpeed.mousePressed;
-        if (downSpeed.mousePressed && !downSpeed.clickState) {
+        upSpeed.clickState = mousePressed;
+
+        if (downSpeed.mouseHover(this) && mousePressed && !downSpeed.clickState) {
             speedDelay++;
         }
-        downSpeed.clickState = downSpeed.mousePressed;
+        downSpeed.clickState = mousePressed;
 
         // Play
         if (play.mouseHover(this) && mousePressed && !play.clickState) {
@@ -205,13 +220,27 @@ public class Runner extends PApplet {
         upSpeed.display(this);
         downSpeed.display(this);
         rotationBtn.display(this);
+        if (currPattern == P_save1) {
+            saveBtn.display(this);
+        }
 
         // Text Displays
+        textAlign(CENTER, CENTER);
         this.fill(0);
-        this.text("Generation: " + genCount, 100, 50);
-        this.text(currPattern.name, 900, 400);
-        this.text(speedDelay * 100 + " ms", 900, 150);
-        this.textAlign(900);
+        this.text("Generation: " + genCount, 120, 30);
+        this.text(speedDelay + " s", 925, 480);
+        this.text(currPattern.name, patternBtn.xPos, patternBtn.yPos+90);
+
+        textAlign(LEFT, CENTER);
+        this.text("Gen: " + genCount +
+                "\nCells alive: " + grid.cellCount +
+                "\nSpeed Delay: " + speedDelay * 1000 + " ms" +
+                "\n\nHotkeys:" +
+                "\n\tStart/stop - Space" +
+                "\n\tReset - r" +
+                "\n\tRandom - q" +
+                "\n\tQuick place - e", 780, 640);
+        textAlign(CENTER, CENTER);
     }
 
     // KBinput triggers
@@ -224,10 +253,11 @@ public class Runner extends PApplet {
             grid.reset();
         }
         if (key == 'E' || key == 'e') {
+            placeMode = true;
         }
-    }
-
-    public void mousePressed () {
+        if (key == 'Q' || key == 'q') {
+            grid.random();
+        }
     }
 
     // Loads pattern from SavesInfo text file
@@ -259,5 +289,33 @@ public class Runner extends PApplet {
 
         p.posX = posX;
         p.posY = posY;
+    }
+
+    // Saves the current grid into savesInfo
+    public void savesFile() {
+        String data1 = "";
+
+        // Reads grid to create data to transfer into savesInfo
+        for (int i = 0; i < grid.cellArray.length; i++) {
+            for (int j = 0; j < grid.cellArray.length; j++) {
+                if (grid.cellArray[j][i].isAlive) {
+                    data1 += "X";
+                }
+                else {
+                    data1 += ".";
+                }
+            }
+            data1 += "\n";
+        }
+
+        // Write to file using FileWriter
+        try {
+            FileWriter myWriter = new FileWriter("src/Assets/SavesInfo");
+            myWriter.write(data1);
+            myWriter.close();  // must close manually
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
     }
 }
